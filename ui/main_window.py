@@ -10,33 +10,38 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Pyxelator')
+        self.file_choice = 'resources/tetrahedron_vertices.json'
         
-        # MenuBar
-        self.menu = QtWidgets.QMenuBar()
-        self.file_menu = self.menu.addMenu('File')
+        self.grid_layout = QtWidgets.QGridLayout()
         
-        self.exit_action = QtGui.QAction('Exit', self)
-        self.exit_action.setShortcut(QtGui.QKeySequence.Quit)
-        self.exit_action.triggered.connect(self.close)
+        self._setup_left_side()
+        self.grid_layout.setColumnMinimumWidth(1, 25)
+        self._setup_right_side()
         
-        self.file_menu.addSeparator()
-        self.file_menu.addAction(self.exit_action)
-        self.menu.show()
+        self.setLayout(self.grid_layout)
+        self.show()
+
+    def _setup_left_side(self):
+        self.canvas_label = QtWidgets.QLabel('Display', self)
+        self.grid_layout.addWidget(self.canvas_label, 0, 0)
         
-        # GUI
-        self.isometric_canvas = BasicCanvas(self)
+        self.isometric_canvas = BasicCanvas()
+        self.grid_layout.addWidget(self.isometric_canvas, 1, 0)
         
-        self.button = QtWidgets.QPushButton('Push it baby!')
-        self.table = JsonTable('resources/tetrahedron_vertices.json', self)
+    def _setup_right_side(self):
+        self.table = JsonTable()
+        self.grid_layout.addWidget(self.table, 1, 2)
         
-        self.vlayout = QtWidgets.QVBoxLayout()
-        self.vlayout.addWidget(self.table)
-        self.vlayout.addWidget(self.button)
+        self.button_layout = QtWidgets.QHBoxLayout()
         
-        self.hlayout = QtWidgets.QHBoxLayout(self)
-        self.hlayout.addWidget(self.isometric_canvas)
-        self.hlayout.addLayout(self.vlayout)
+        self.load_table_button = QtWidgets.QPushButton('Load')
+        self.load_table_button.clicked.connect(lambda: self.table.load_json(self.file_choice))
+        self.button_layout.addWidget(self.load_table_button)
         
+        self.button_layout.addSpacerItem(QtWidgets.QSpacerItem(200, 25))
+                
+        self.save_table_button = QtWidgets.QPushButton('Save')
+        self.save_table_button.clicked.connect(lambda: self.table.save_json(self.file_choice))
+        self.button_layout.addWidget(self.save_table_button)
         
-    
-        
+        self.grid_layout.addLayout(self.button_layout, 0, 2)

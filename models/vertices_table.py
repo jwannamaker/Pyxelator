@@ -3,10 +3,9 @@ import json
 from PySide6 import QtCore, QtGui, QtWidgets
 
 class JsonTable(QtWidgets.QTableWidget):
-    def __init__(self, json_file, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.data = {}
-        self.load_json(json_file)
         
     def load_json(self, json_file):
         with open(json_file, 'r') as f:
