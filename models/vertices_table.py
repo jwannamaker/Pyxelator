@@ -3,11 +3,11 @@ import json
 from PySide6 import QtCore, QtGui, QtWidgets
 
 class JsonTable(QtWidgets.QTableWidget):
-    def __init__(self, json_file, parent=None):
+    def __init__(self, parent):
         super().__init__(parent)
         self.data = {}
-        self.load_json(json_file)
-        
+    
+    @QtCore.Slot(str)
     def load_json(self, json_file):
         with open(json_file, 'r') as f:
             self.data = json.load(f)
@@ -30,3 +30,8 @@ class JsonTable(QtWidgets.QTableWidget):
                 self.setItem(row_index, col_index, QtWidgets.QTableWidgetItem(str(value)))
                 self.item(row_index, col_index).setTextAlignment(QtCore.Qt.AlignCenter)
                 
+    @QtCore.Slot(str)
+    def save_json(self, json_file):
+        with open(json_file, 'w') as f:
+            json.dump(self.data, f)
+            
