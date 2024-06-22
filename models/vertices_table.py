@@ -17,7 +17,7 @@ class JsonTable(QtWidgets.QTableWidget):
         self.setRowCount(len(self.data))
         self.setColumnCount(len(self.data[list(self.data.keys())[0]]))
         
-        self.setHorizontalHeaderLabels(['x', 'y', 'z'])
+        self.setHorizontalHeaderLabels(['X', 'Y', 'Z'])
         self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
