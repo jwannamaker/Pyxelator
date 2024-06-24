@@ -1,4 +1,5 @@
 import json
+import string
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -20,6 +21,7 @@ class JsonTable(QtWidgets.QTableWidget):
         self.setHorizontalHeaderLabels(['X', 'Y', 'Z'])
         self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.verticalHeader().setVisible(False)
         self.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
         
         # populate the table
@@ -27,5 +29,9 @@ class JsonTable(QtWidgets.QTableWidget):
             for col_index, value in enumerate(entry):
                 value = round(value, 3)
                 self.setItem(row_index, col_index, QtWidgets.QTableWidgetItem(str(value)))
-                self.item(row_index, col_index).setTextAlignment(QtCore.Qt.AlignCenter)
-                
+                self.item(row_index, col_index).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            
+    @QtCore.Slot(str)
+    def save_json(self, json_file):
+        with open(json_file, 'w') as f:
+            json.dump(self.data, f)
