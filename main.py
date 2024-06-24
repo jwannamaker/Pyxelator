@@ -1,15 +1,7 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
+from ui.main_window import MainWindow
 
-    def initUI(self):
-        self.setWindowTitle('Pyxelator')
-        
-        self.show()
-        
 if __name__ == '__main__':
     app = QApplication([])
     window = MainWindow()
