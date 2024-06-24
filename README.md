@@ -1,8 +1,5 @@
 # Pyxelator
-Isometric game asset creation tool.
+Isometric pixelated game asset creation tool.
 
-## Features
-- Linked viewports, providing Top/Bottom, Right/Left, Front/Back and a main Isometric view
-- Import model via .obj, .json, .stl, or manual entry of vertices
-- Recolor the model based on palette imported via .json, .png, or manual entry
-- Save/export all changes made to the model
+Basic GUI Layout (6/24/2024)
+![App screenshot](<"screenshots/Screenshot 2024-06-22 at 4.57.27\342\200\257PM.png">)
