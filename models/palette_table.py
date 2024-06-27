@@ -24,7 +24,7 @@ class PaletteTable(QtWidgets.QTableWidget):
             palette = f.getpalette()
             palette = np.array_split(palette, len(palette) // 3)
             palette = [[int(i) for i in x] for x in palette]
-            self.palette_data = {k: {'R': v[0], 'G': v[1], 'B': v[2]} for k, v in enumerate(palette)}
+            self.palette_data = {int(k): {'R': v[0], 'G': v[1], 'B': v[2]} for k, v in enumerate(palette)}
             
         if not self.palette_data:
             return
