@@ -1,29 +1,15 @@
 import json
 import string
 
+import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
-class JsonTable(QtWidgets.QTableWidget):
+from models.json_widget import JsonTableWidget
+
+class VerticesTable(JsonTableWidget):
     def __init__(self):
-        super().__init__()
-        self.data = {}
-        
-        self.setColumnCount(3)
-        
-        self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        self.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        self.setHorizontalHeaderLabels(['X', 'Y', 'Z'])
-        self.verticalHeader().setVisible(False)
-        self.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
-    
-    @QtCore.Slot(str)
-    def load_json(self, json_file):
-        with open(json_file, 'r') as f:
-            self.data = json.load(f)
-        
-        if not self.data:
-            return
-        self.populate_table()
+        super().__init__(3, ['X', 'Y', 'Z'])
+        self.faces = {}
     
     def populate_table(self):
         self.setRowCount(len(self.data))
@@ -34,8 +20,40 @@ class JsonTable(QtWidgets.QTableWidget):
                 value = round(value, 3)
                 self.setItem(row_index, col_index, QtWidgets.QTableWidgetItem(str(value)))
                 self.item(row_index, col_index).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            
+
+    @QtCore.Slot()
+    def open_file_dialog(self):
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open', 'resources')
+        if filename:
+            if filename.endswith('.obj'):
+                self.load_obj(filename)
+            if filename.endswith('.json'):
+                self.load_json(filename)
+            self.populate_table()
+        # self.file = filename
+    
+    @QtCore.Slot()
+    def save_file_dialog(self):
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Save', 'resources', ('Text file (*.json)'))
+        if filename:
+            self.save_json(filename)
+        # self.file = filename
+
     @QtCore.Slot(str)
-    def save_json(self, json_file):
-        with open(json_file, 'w') as f:
-            json.dump(self.data, f)
+    def load_obj(self, obj_file):
+        self.vertices_count = 0
+        self.faces_count = 0
+
+        with open(obj_file, 'r') as f:
+            for line in f.readlines():
+                if line[0] == 'v':
+                    vertices = line.split()
+                    vertices.remove('v')
+                    self.data[self.vertices_count] = [float(x) for x in vertices]
+                    self.vertices_count += 1
+                
+                if line[0] == 'f':
+                    face = line.split()
+                    face.remove('f')
+                    self.faces[self.faces_count] = [int(x) for x in face]
+                    self.faces_count += 1
