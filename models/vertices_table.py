@@ -21,6 +21,12 @@ class VerticesTable(JsonTableWidget):
                 self.setItem(row_index, col_index, QtWidgets.QTableWidgetItem(str(value)))
                 self.item(row_index, col_index).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
+    def get_plot_data(self):
+        # X = [self.data[k][0] for k in self.data]
+        # Y = [self.data[k][1] for k in self.data]
+        # Z = [self.data[k][2] for k in self.data]
+        return [self.data[k] for k in self.data], [self.faces[k] for k in self.faces]
+
     @QtCore.Slot()
     def open_file_dialog(self):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open', 'resources')

@@ -22,7 +22,7 @@ class JsonTableWidget(QtWidgets.QTableWidget):
         self.setShowGrid(False)
 
     def get_current_selected(self):
-        return tuple(self.data[self.currentRow()].values())
+        return tuple(self.data[self.currentRow()])
     
     @abstractmethod
     def populate_table(self):
