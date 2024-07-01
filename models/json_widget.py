@@ -43,7 +43,7 @@ class JsonTableWidget(QtWidgets.QTableWidget):
     def save_json(self, json_file):
         with open(json_file, 'w') as f:
             json.dump(self.data, f)
-
+            
     @abstractmethod
     @QtCore.Slot()
     def open_file_dialog(self):

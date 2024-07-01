@@ -2,7 +2,7 @@ import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from models.basic_canvas import BasicCanvas
-from models.viewport import Viewport
+from models.top_viewport import TopViewport
 from models.vertices_table import VerticesTable
 from models.palette_table import PaletteTable
 from models.interactive_table import InteractiveTablePanel
@@ -39,7 +39,7 @@ class MainWindow(QtWidgets.QWidget):
         self.show()
 
     def _setup_left_side(self):
-        self.top_viewport = Viewport()
+        self.top_viewport = TopViewport()
         self.grid_layout.addWidget(self.top_viewport, 0, 0)
         
         self.render_canvas = BasicCanvas()

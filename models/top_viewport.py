@@ -6,7 +6,7 @@ from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import axes3d
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-class Viewport(QtWidgets.QWidget):
+class TopViewport(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         layout = QtWidgets.QVBoxLayout()
@@ -34,9 +34,12 @@ class Viewport(QtWidgets.QWidget):
         # self.ax.set_axis_off()
         # self.ax.set_visible(False)
         self.ax.set(xlim=(-1.0, 1.0), ylim=(-1.0, 1.0), zlim=(-1.0, 1.0))
-        self.ax.add_collection3d(Poly3DCollection(faced_vertices, color=colors))
+        self.shape_collection = self.ax.add_collection3d(Poly3DCollection(faced_vertices, color=colors))
         
         self.ax.set_aspect('equal')
         self.canvas.figure.tight_layout()
         self.figure.set_canvas(self.canvas)
         self.canvas.draw()
+
+    def get_plot_data(self):
+        return Poly3DCollection(self.ax.collections) 
