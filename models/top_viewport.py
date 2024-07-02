@@ -1,5 +1,6 @@
 import numpy as np
 from PySide6 import QtWidgets
+import matplotlib as mpl
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 from matplotlib.figure import Figure
@@ -17,29 +18,40 @@ class TopViewport(QtWidgets.QWidget):
         layout.addWidget(NavigationToolbar2QT(self.canvas))
         layout.addWidget(self.canvas)
 
-        self.ax = self.canvas.figure.add_subplot(projection='3d')
-        self.ax.set(xlim=(-1.0, 1.0), ylim=(-1.0, 1.0), zlim=(-1.0, 1.0))
-
-        self.ax.set_aspect('equal')
-        self.canvas.figure.tight_layout()
+        self.ax: axes3d.Axes3D = self.canvas.figure.add_subplot(projection='3d')
+        self.ax.set_box_aspect((1, 1, 1), zoom=1)
+        self.ax.set_axis_off()
+        self.canvas.figure.tight_layout(rect=(0, 0, 1, 1))
         self.setLayout(layout)
-
-    def draw_figure(self, vertices, faces, colors):
+    
+    def draw_figure(self, vertices, faces):
         self.ax.clear()
 
-        # use the faces to create the vertices list
+        # List of vertices for each face: 
+        #
+        # face 0:
+        #   [v_0[x, y, z], v_1[x, y, z], ...], 
+        # face 1:
+        #   [v_0[x, y, z], v_1[x, y, z], ...], 
+        # ...
+        # face N:
+        #   [v_0[x, y, z], v_1[x, y, z], ...], 
         faced_vertices = [[vertices[i-1] for i in face] for face in faces]
-        colors = [colors[0], colors[0], colors[1], colors[2]]    # 4 faces
-
-        # self.ax.set_axis_off()
-        # self.ax.set_visible(False)
-        self.ax.set(xlim=(-1.0, 1.0), ylim=(-1.0, 1.0), zlim=(-1.0, 1.0))
+        colors = [(0, 0, 0, 0.25) for _ in range(len(faces))]
         self.shape_collection = self.ax.add_collection3d(Poly3DCollection(faced_vertices, color=colors))
         
-        self.ax.set_aspect('equal')
-        self.canvas.figure.tight_layout()
+        x = [v[0] for v in vertices]
+        y = [v[1] for v in vertices]
+        z = [v[2] for v in vertices]
+        self.ax.set(xlim=(min(x), max(x)),
+                    ylim=(min(y), max(y)),
+                    zlim=(min(z), max(z)))
+        
+        self.ax.set_box_aspect((1, 1, 1), zoom=1)
+        self.ax.set_axis_off()
+        self.canvas.figure.tight_layout(rect=(0, 0, 1, 1))
         self.figure.set_canvas(self.canvas)
         self.canvas.draw()
 
     def get_plot_data(self):
-        return Poly3DCollection(self.ax.collections) 
+        return self.shape_collection

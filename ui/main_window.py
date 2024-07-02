@@ -1,8 +1,8 @@
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from models.basic_canvas import BasicCanvas
 from models.top_viewport import TopViewport
+from models.bottom_viewport import BottomViewport
 from models.vertices_table import VerticesTable
 from models.palette_table import PaletteTable
 from models.interactive_table import InteractiveTablePanel
@@ -42,8 +42,8 @@ class MainWindow(QtWidgets.QWidget):
         self.top_viewport = TopViewport()
         self.grid_layout.addWidget(self.top_viewport, 0, 0)
         
-        self.render_canvas = BasicCanvas()
-        self.grid_layout.addWidget(self.render_canvas, 2, 0)     
+        self.bottom_viewport = BottomViewport()
+        self.grid_layout.addWidget(self.bottom_viewport, 2, 0)     
                                                
     def _setup_right_side(self):
         self.vertices_table = VerticesTable()
@@ -81,13 +81,4 @@ class MainWindow(QtWidgets.QWidget):
         
     def draw_figure(self):
         vertices, faces = self.vertices_table.get_plot_data()
-        
-        colors = self.get_colors()
-
-        self.info_panel.appendPlainText('Vertices')
-        self.info_panel.appendPlainText(str(vertices))
-        self.info_panel.appendPlainText('Faces')
-        self.info_panel.appendPlainText(str(faces))
-        self.info_panel.appendPlainText('Colors')
-        self.info_panel.appendPlainText(str(colors))
-        self.top_viewport.draw_figure(vertices, faces, colors)
+        self.top_viewport.draw_figure(vertices, faces)
