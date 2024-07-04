@@ -71,13 +71,7 @@ class MainWindow(QtWidgets.QWidget):
         self.grid_layout.addWidget(self.light_palette_panel, 2, 4)
             
     def get_colors(self):
-        dark_color = self.dark_palette_table.get_current_selected()
-        mid_color = self.mid_palette_table.get_current_selected()
-        light_color = self.light_palette_table.get_current_selected()
-        colors = dark_color + mid_color + light_color
-        return [i / 255 for i in dark_color], \
-               [i / 255 for i in mid_color], \
-               [i / 255 for i in light_color]
+        pass
         
     def draw_figure(self):
         vertices, faces = self.vertices_table.get_plot_data()

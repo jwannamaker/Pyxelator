@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image, ImageQt
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from models.json_widget import JsonTableWidget
+from models.json_table_widget import JsonTableWidget
 
 class PaletteTable(JsonTableWidget):
     def __init__(self):
@@ -31,15 +31,13 @@ class PaletteTable(JsonTableWidget):
             if filename.endswith('.png'):
                 self.load_png(filename)
             self.populate_table()
-        # self.file = filename
     
     @QtCore.Slot()
     def save_file_dialog(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Save', 'resources', ('Text file (*.json)'))
         if filename:
             self.save_json(filename)
-        # self.file = filename
-
+            
     def load_png(self, palette_png):
         with Image.open(palette_png) as f:
             f.convert('RGB')
@@ -50,3 +48,5 @@ class PaletteTable(JsonTableWidget):
             
         if not self.data:
             return
+            
+        self.file_changed.emit(palette_png)

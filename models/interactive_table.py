@@ -1,10 +1,10 @@
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from models.json_widget import JsonTableWidget
+from models.json_table_widget import JsonTableWidget
 
 class InteractiveTablePanel(QtWidgets.QWidget):
     def __init__(self, table: JsonTableWidget):
@@ -23,11 +23,8 @@ class InteractiveTablePanel(QtWidgets.QWidget):
         
         open_button = QtWidgets.QPushButton('Open')
         open_button.clicked.connect(self.table.open_file_dialog)
-        panel_layout.addWidget(open_button, 0, 1)
-        
-        save_button = QtWidgets.QPushButton('Save')
-        save_button.clicked.connect(self.table.save_file_dialog)
-        panel_layout.addWidget(save_button, 0, 2)
+        self.table.file_changed.connect(self.update_label)
+        panel_layout.addWidget(open_button, 0, 2)
 
         panel_layout.addWidget(self.table, 1, 0, 1, 3)
         
@@ -35,4 +32,4 @@ class InteractiveTablePanel(QtWidgets.QWidget):
 
     @QtCore.Slot(str)
     def update_label(self, filename):
-        self.file_label.setText(filename)
+        self.file_label.setText(PurePosixPath(filename).name)

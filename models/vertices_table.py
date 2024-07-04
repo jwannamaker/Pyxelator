@@ -4,7 +4,7 @@ import string
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from models.json_widget import JsonTableWidget
+from models.json_table_widget import JsonTableWidget
 
 class VerticesTable(JsonTableWidget):
     def __init__(self):
@@ -36,14 +36,12 @@ class VerticesTable(JsonTableWidget):
             if filename.endswith('.json'):
                 self.load_json(filename)
             self.populate_table()
-        # self.file = filename
     
     @QtCore.Slot()
     def save_file_dialog(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Save', 'resources', ('Text file (*.json)'))
         if filename:
             self.save_json(filename)
-        # self.file = filename
 
     @QtCore.Slot(str)
     def load_obj(self, obj_file):
@@ -63,3 +61,5 @@ class VerticesTable(JsonTableWidget):
                     face.remove('f')
                     self.faces[self.faces_count] = [int(x) for x in face]
                     self.faces_count += 1
+        
+        self.file_changed.emit(obj_file)

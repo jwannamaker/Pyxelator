@@ -14,8 +14,6 @@ class TopViewport(QtWidgets.QWidget):
         
         self.figure = Figure()
         self.canvas = FigureCanvasQTAgg(self.figure)
-        # self.figure.canvas.mpl_connect("button_release_event", self.on_click)
-        layout.addWidget(NavigationToolbar2QT(self.canvas))
         layout.addWidget(self.canvas)
 
         self.ax: axes3d.Axes3D = self.canvas.figure.add_subplot(projection='3d')
@@ -53,5 +51,5 @@ class TopViewport(QtWidgets.QWidget):
         self.figure.set_canvas(self.canvas)
         self.canvas.draw()
 
-    def get_plot_data(self):
-        return self.shape_collection
+    def get_render_data(self):
+        return self.ax.get_proj()

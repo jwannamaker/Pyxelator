@@ -3,10 +3,11 @@ from abc import abstractmethod
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-class JsonTableWidget(QtWidgets.QTableWidget):
+class JsonTableWidget(QtWidgets.QTableWidget, QtCore.QObject):
+    file_changed = QtCore.Signal(str)
+    
     def __init__(self, num_col, col_labels):
         super().__init__()
-        self.file = ''
         self.data = {}
         self.setColumnCount(num_col)
         self.setHorizontalHeaderLabels(col_labels)
@@ -33,6 +34,7 @@ class JsonTableWidget(QtWidgets.QTableWidget):
             return {int(k): v for k, v in x.items()}
         return x
 
+    @QtCore.Slot(str)
     def load_json(self, json_file):
         with open(json_file) as f:
             self.data = json.load(f, object_hook=self.convert_keys)
@@ -40,10 +42,14 @@ class JsonTableWidget(QtWidgets.QTableWidget):
         if not self.data:
             return
         
+        self.file_changed.emit(json_file)
+        
+    
+    @QtCore.Slot(str)
     def save_json(self, json_file):
         with open(json_file, 'w') as f:
             json.dump(self.data, f)
-            
+
     @abstractmethod
     @QtCore.Slot()
     def open_file_dialog(self):
