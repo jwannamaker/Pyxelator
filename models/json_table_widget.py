@@ -42,8 +42,8 @@ class JsonTableWidget(QtWidgets.QTableWidget, QtCore.QObject):
         if not self.data:
             return
         
+        self.populate_table()
         self.file_changed.emit(json_file)
-        
     
     @QtCore.Slot(str)
     def save_json(self, json_file):
