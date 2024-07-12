@@ -1,8 +1,6 @@
 import numpy as np
 from PySide6 import QtWidgets, QtGui, QtCore
-import matplotlib as mpl
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
-from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import axes3d
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
