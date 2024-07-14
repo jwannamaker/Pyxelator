@@ -4,7 +4,8 @@ import string
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from models.json_widget import JsonTableWidget
+from models.json_table_widget import JsonTableWidget
+
 
 class VerticesTable(JsonTableWidget):
     def __init__(self):
@@ -12,6 +13,7 @@ class VerticesTable(JsonTableWidget):
         self.faces = {}
     
     def populate_table(self):
+        self.clearContents()
         self.setRowCount(len(self.data))
         
         # populate the table
@@ -21,29 +23,39 @@ class VerticesTable(JsonTableWidget):
                 self.setItem(row_index, col_index, QtWidgets.QTableWidgetItem(str(value)))
                 self.item(row_index, col_index).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
-    def get_plot_data(self):
+    def get_vertices(self):
+        return list(self.data.values())
+
+    def get_faced_vertices(self):
         # X = [self.data[k][0] for k in self.data]
         # Y = [self.data[k][1] for k in self.data]
         # Z = [self.data[k][2] for k in self.data]
-        return [self.data[k] for k in self.data], [self.faces[k] for k in self.faces]
+        """ Note: .obj files use 1 as first index, not 0. """
+        return [[self.data[v-1] for v in face] for face in self.faces.values()]
 
     @QtCore.Slot()
-    def open_file_dialog(self):
+    def open_file_dialog(self, file_choice=None):
+        """ Open file_choice if there is one, else bring up dialog. """
+        if file_choice and str(file_choice).endswith('.obj'):
+            self.load_obj(file_choice)
+            return
+        if file_choice and str(file_choice).endswith('.json'):
+            self.load_json(file_choice)
+            return
+        
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open', 'resources')
-        if filename:
-            if filename.endswith('.obj'):
-                self.load_obj(filename)
-            if filename.endswith('.json'):
-                self.load_json(filename)
-            self.populate_table()
-        # self.file = filename
+        if filename and filename.endswith('.obj'):
+            self.load_obj(filename)
+            return
+        if filename and filename.endswith('.json'):
+            self.load_json(filename)
+            return
     
     @QtCore.Slot()
     def save_file_dialog(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Save', 'resources', ('Text file (*.json)'))
         if filename:
             self.save_json(filename)
-        # self.file = filename
 
     @QtCore.Slot(str)
     def load_obj(self, obj_file):
@@ -63,3 +75,6 @@ class VerticesTable(JsonTableWidget):
                     face.remove('f')
                     self.faces[self.faces_count] = [int(x) for x in face]
                     self.faces_count += 1
+        
+        self.populate_table()
+        self.file_changed.emit(obj_file)
