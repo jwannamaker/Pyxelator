@@ -74,4 +74,5 @@ class MainWindow(QtWidgets.QWidget):
         
     def render_bottom(self):
         self.bottom_viewport.render(self.vertices_table.get_faced_vertices(), 
-                                    self.palette_table.get_colors())
+                                    self.palette_table.get_colors(),
+                                    *self.top_viewport.get_camera_angles())

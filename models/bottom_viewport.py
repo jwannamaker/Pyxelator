@@ -7,6 +7,7 @@ def average_z(face):
     return np.mean([v[2] for v in face])
 
 def get_isometric_projection(x:int, y:int, z:int):
+    """ Trash. """
     SQRT_2, SQRT_3, SQRT_6 = 2**0.5, 3**0.5, 6**0.5
     x_out = (x-y) / SQRT_2
     y_out = (x+y-2*z) / SQRT_6
@@ -29,10 +30,11 @@ def project(width, height, point):
     
     return round((width / 2) - point[0]), round((height / 2) - point[1])
 
-def isometric_projection(x, y, z):
+def isometric_projection(azim, elev, x, y, z):
+    """ Differently trash. """
     # Convert degrees to radians
-    angle_x = np.deg2rad(-30)
-    angle_y = np.deg2rad(45)
+    angle_x = np.deg2rad(azim)
+    angle_y = np.deg2rad(elev)
     
     # Rotate around the X-axis
     x1 = x
@@ -43,8 +45,7 @@ def isometric_projection(x, y, z):
     x2 = x1 * np.cos(angle_y) + z1 * np.sin(angle_y)
     y2 = y1
     
-    print(f'point: {x, y, z} \tmapped to {x2, y2}' )
-    return (x2, y2)
+    return x2, y2
 
 def scale(x, y):
     return (x + 1) * 150, (y + 1) * 150
@@ -70,12 +71,13 @@ class BottomViewport(QtWidgets.QWidget):
         layout.addWidget(self.label)
         self.setLayout(layout)
     
-    def render(self, face_vertices, colors):
+    def render(self, face_vertices, colors, azim, elev):
         # Remember: PIL draws with (0, 0) in the upper left
-        projected_faces = sorted(face_vertices, key=average_z, reverse=True)
         # projected_faces = [[project(self.width, self.height, v) for v in face] for face in projected_faces] 
-        projected_faces = [[scale(*isometric_projection(*v)) for v in face] for face in projected_faces] 
+        # projected_faces = [[isometric_projection(azim, elev, *v) for v in face] for face in projected_faces] 
+        # projected_faces = sorted(projected_faces, key=average_z, reverse=True)
         # projected_faces = [[scale(*v) for v in face] for face in projected_faces]
+        projected_faces = 
         
         out = Image.new('RGBA', (self.width, self.height))
         drawing_context = ImageDraw.Draw(out)

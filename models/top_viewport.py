@@ -35,7 +35,9 @@ class TopViewport(QtWidgets.QWidget):
         zlims = min(vertices, key=lambda v: v[2])[2], max(vertices, key=lambda v: v[2])[2]
         self.ax.set(xlim=xlims, ylim=ylims, zlim=zlims)
         
-        self.ax.set_proj_type('ortho')
+        self.ax.set_proj_type('persp', 0.9)
+        self.ax.azim = 26.565
+        self.ax.elev = -26.565
         self.ax.set_box_aspect((1, 1, 1), zoom=1)
         self.ax.set_axis_off()
         self.canvas.figure.tight_layout(rect=(0, 0, 1, 1))
@@ -44,4 +46,12 @@ class TopViewport(QtWidgets.QWidget):
 
     def get_render_data(self):
         # return self.ax.get_proj()
+        # return self.ax.azim, self.ax.elev
+        return self.ax.get_proj()
+    
+    def get_camera_angles(self):
         return self.ax.azim, self.ax.elev
+    
+    def get_world_projection(self):
+        # return self.shape_collection.get_
+        pass
