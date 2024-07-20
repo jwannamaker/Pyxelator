@@ -1,0 +1,51 @@
+* fb6ef25 Adding matplotlib docs, more models
+* 2c0c6b6 Restructure and Adding script to scrape obj files
+* e6f72df Added more descriptive accessor methods in top_viewport
+* 7056f8f Update README.md
+*   35e8d6c Merge pull request #16 from jwannamaker/12-bottom-viewport
+|\  
+| * ebaf54e Added screenshots, models, and TablePanel
+| * f2c839f Bottom viewport adds border, properly fits.
+| * 1f2d68d Bottom view renders an image!!
+| * 8216811 Set up signal/slot for updating filename labels
+| * ee44d4a Top viewport renders grey, transparent and zoomed in
+| * 737ba77 Added BottomViewport
+| * dc0226a Removed OpenGLWidget based BasicCanvas
+|/  
+*   d4f04a9 Merge pull request #15 from jwannamaker/13-top-viewport
+|\  
+| * ee68290 Top viewport renders using a .obj for face vertices
+| * 47394a3 Added screen recording of current UI flow
+| * b64337f Added .obj, conversion support and abstract interface for tables
+* | 09baefe Update README.md
+|/  
+* 7ed8852 Update README.md
+* e197331 Update README.md
+* f7e6def Update README.md
+* 308f0e0 Update README.md
+* c364a13 Remove cached .qt-venv and .vscode  # Please enter the commit message for your changes. Lines starting
+* b8eb9b3 Added screenshot showing latest app interface
+* 1e3c8a7 .gitignore updates
+* 60e8c69 Advanced layout
+* ba35d5a Update README.md
+* 1ef64a8 Update README.md
+* 81c132a Update README.md
+* 2251fa3 Added screenshots directory
+*   d1268e9 Merge pull request #11 from jwannamaker/2-basic-gui-layout
+|\  
+| * a5db18b Basic layout complete, moving onto advanced layout
+| * a7cd5d2 Capitalize JsonTable column headers (X, Y, Z)
+| * 8cfa309 Viewport, labels, and load/save buttons in grid layout
+| * f910c8b Revert "Error adding JsonTable with a Group/Frame parent"
+| * 15909f4 Revert "Subclassed QTableWidget display vertices from JSON"
+| * 170b84a Error adding JsonTable with a Group/Frame parent
+| * 0a3d2bc Subclassed QTableWidget display vertices from JSON
+|/  
+*   d8a98e6 Merge pull request #10 from jwannamaker/1-project-structure
+|\  
+| * 429e43d Base main.py setup
+| * 7bf2ac2 Inital project structure
+|/  
+* 815bbb1 Basic layout
+* 759f329 Update README.md
+* 6f5963c Initial commit
