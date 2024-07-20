@@ -1,11 +1,11 @@
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from models.top_viewport import TopViewport
-from models.bottom_viewport import BottomViewport
-from models.vertices_table import VerticesTable
-from models.palette_table import PaletteTable
-from models.table_panel import TablePanel
+from ui.top_viewport import TopViewport
+from ui.bottom_viewport import BottomViewport
+from ui.vertices_table import VerticesTable
+from ui.palette_table import PaletteTable
+from ui.table_panel import TablePanel
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
@@ -40,6 +40,7 @@ class MainWindow(QtWidgets.QWidget):
         self.grid_layout.addWidget(self.top_viewport, 1, 0)
         
         self.bottom_viewport = BottomViewport()
+        self.top_viewport.projection_changed.connect(self.bottom_viewport.update_projection)
         self.grid_layout.addWidget(self.bottom_viewport, 3, 0)
                                                
     def _setup_right_side(self):
