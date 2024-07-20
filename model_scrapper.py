@@ -45,10 +45,16 @@ def download_obj(driver: webdriver.Firefox, polyhedra_name: str, output_dir: str
 
             driver.get(obj_url)
             with open(output_path, 'wb') as f:
-                obj_contents = str(driver.page_source.encode('utf-8'), encoding='utf-8')
-                obj_contents = obj_contents[obj_contents.find('v') : obj_contents.find('<')]
-                f.write(obj_contents)
+                obj_contents = driver.page_source
+                obj_contents = obj_contents[obj_contents.find('v') :]
+                while '<' in obj_contents:
+                    obj_contents = obj_contents[: obj_contents.rfind('<')]
+                print(f'After cleaning: {obj_contents}')
+                print()
+                f.write(obj_contents.encode('utf-8'))
             print(f"Downloaded {obj_url} to {output_path}")
+            print()
+            print()
             
 
 if __name__ == '__main__':
