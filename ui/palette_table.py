@@ -39,8 +39,9 @@ class PaletteTable(JsonTableWidget):
         
         for row, color in self.data.items():
             color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), color))
-            self.setItem(row, 0, QtWidgets.QTableWidgetItem(QtGui.QPixmap(color_box), str(color)))
-            self.item(row, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+            text = f'{color[0]:3d} {color[1]:3d} {color[2]:3d}'
+            self.setItem(row, 0, QtWidgets.QTableWidgetItem(QtGui.QPixmap(color_box), text))
+            self.item(row, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
     
     @QtCore.Slot()
     def open_file_dialog(self, file_choice):

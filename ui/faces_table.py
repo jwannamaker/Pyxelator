@@ -23,10 +23,14 @@ class FacesTable(JsonTableWidget):
         for i, v in enumerate(self.faces):
             default_color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), (96, 96, 96)))
             default_color_box = QtGui.QPixmap(default_color_box)
-            self.setItem(i, 0, QtWidgets.QTableWidgetItem(default_color_box, 
-                                                          str([vert + 1 for vert in v])))
-            self.item(i, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
-
+            text = '[ '
+            for value in v:
+                text += f'{value + 1:2d} '
+            text += ']'
+            self.setItem(i, 0, QtWidgets.QTableWidgetItem(default_color_box, text))
+            self.item(i, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            self.setRowHeight(i, 50)
+            
     def reset(self, faces):
         super()._reset()
         self.faces = faces

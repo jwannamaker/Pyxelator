@@ -33,7 +33,6 @@ class TopViewport(QtWidgets.QWidget):
         self.ax.clear()
         colors = [(0, 0, 0, 0.25) for _ in range(len(faces))]
         
-        print([f for f in faces])
         self.face_vertices = [[vertices[v] for v in f] for f in faces]
         self.shape_collection = self.ax.add_collection3d(Poly3DCollection(self.face_vertices, color=colors))
         
