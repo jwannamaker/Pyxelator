@@ -50,10 +50,10 @@ class TopViewport(QtWidgets.QWidget):
 
     @QtCore.Slot(int)
     def isolate_face(self, face):
-        self.shape_collection.set_facecolor((0, 0, 0, 0.1))
+        self.shape_collection.set_facecolor((0, 0, 0, 0.05))
         
         # Adding the isolated face to the axis
-        self.ax.add_collection3d(Poly3DCollection([self.face_vertices[face]], color=(0.25, 0, 0.1, 0.3)))
+        self.ax.add_collection3d(Poly3DCollection([self.face_vertices[face]], color=(0.6, 0, 0.3, 0.3)))
         self.canvas.draw()
         
     def on_motion_notify_event(self, event: MouseEvent):

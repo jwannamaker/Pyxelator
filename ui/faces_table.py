@@ -21,7 +21,7 @@ class FacesTable(JsonTableWidget):
         self.setRowCount(len(self.faces))
 
         for i, v in enumerate(self.faces):
-            default_color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), (96, 96, 96)))
+            default_color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), (255//4, 255//4, 255//4)))
             default_color_box = QtGui.QPixmap(default_color_box)
             text = '[ '
             for value in v:
@@ -36,13 +36,14 @@ class FacesTable(JsonTableWidget):
         self.faces = faces
         self.populate_table()
 
-    @QtCore.Slot(QtGui.QPixmap)
-    def update_icon(self, color_box: QtGui.QPixmap):
-        if self.selectedIndexes():
-            i = self.selectedIndexes()[0].row()
-            self.item(i, 0).setIcon(QtGui.QIcon(color_box))
-            self.update(self.selectedIndexes()[0])
-            # self.setCurrentItem(QtWidgets.QTableWidgetItem(QtGui.QIcon(color_box), self.currentItem().text()))
+    @QtCore.Slot(QtGui.QPixmap, list, tuple)
+    def update_icon(self, color_icon: QtGui.QPixmap, color: list[int], norm_color: tuple[int]):
+        # self.removeRow(self.currentRow())
+        # self.insertRow(self.currentRow())
+        color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), norm_color))
+        updated_item = QtWidgets.QTableWidgetItem(self.currentItem())
+        updated_item.setIcon(QtGui.QPixmap(color_box))
+        self.setItem(self.currentRow(), 0, updated_item)
 
     def on_current_index_changed(self):
         self.face_changed.emit(self.faces[self.currentItem().row()])

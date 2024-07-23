@@ -18,7 +18,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setFocus(QtCore.Qt.FocusReason.NoFocusReason)
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         
-        # self.setFont(QtGui.QFont(['Courier', 'Monospace']))
+        self.setFont(QtGui.QFont(['Courier', 'Monospace']))
         
         self.grid_layout = QtWidgets.QGridLayout()
         self.grid_layout.setSpacing(12)

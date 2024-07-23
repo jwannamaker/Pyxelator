@@ -28,7 +28,7 @@ class PaletteTable(JsonTableWidget):
     def __init__(self):
         super().__init__(1, ['Colors'])
         
-        self.doubleClicked.connect(self.on_color_double_clicked)
+        self.horizontalHeader().sectionPressed.connect(self.on_color_double_clicked)
         # self.setMaximumWidth(120)
     
     # def set_num_selectable(self, num):
@@ -36,7 +36,7 @@ class PaletteTable(JsonTableWidget):
         # self.setSelectionModel(LimitedSelectionModel(self.model(), num))
     
     def get_normalized_color(self):
-        """ Returns a tuple of 3 floats between 0-1"""
+        """ Returns a tuple of 3 floats in range [0, 1]. """
         i = self.currentIndex().row()
         return self.data[i][0] / 255, self.data[i][1] / 255, self.data[i][2] / 255
     
@@ -85,8 +85,12 @@ class PaletteTable(JsonTableWidget):
         self.populate_table()
     
     def on_color_double_clicked(self):
-        icon = self.currentItem().icon()
+        icon = self.item(self.currentRow(), 0).icon()
         color = [int(i) for i in self.currentItem().text().split()]
-        normalized_color = self.get_normalized_color()
-        
-        self.color_double_clicked.emit(icon, color, normalized_color)
+        norm_color = tuple(int(i) for i in self.currentItem().text().split())
+        # normalized_color = self.get_normalized_color()
+        print(icon)
+        print(color)
+        print(norm_color)
+        print(icon, color, norm_color)
+        self.color_double_clicked.emit(icon, color, norm_color)
