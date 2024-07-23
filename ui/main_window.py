@@ -9,6 +9,7 @@ from ui.faces_table import FacesTable
 from ui.palette_table import PaletteTable
 from ui.table_panel import TablePanel
 
+
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -17,7 +18,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setFocus(QtCore.Qt.FocusReason.NoFocusReason)
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         
-        self.setFont(QtGui.QFont(['Courier']))
+        # self.setFont(QtGui.QFont(['Courier', 'Monospace']))
         
         self.grid_layout = QtWidgets.QGridLayout()
         self.grid_layout.setSpacing(12)
@@ -63,11 +64,12 @@ class MainWindow(QtWidgets.QWidget):
         
         # self.grid_layout.addWidget(QtWidgets.QLabel('Pixel Art Configuration'), 2, 0, 1, 3,
         #                            QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
-        self.palette_table = PaletteTable()
-        
         self.faces_table = FacesTable(self.vertices_table.get_faces())
         self.faces_table.face_changed.connect(self.vertices_table.show_selected_face)
         self.faces_table.face_double_clicked.connect(self.top_viewport.isolate_face)
+        
+        self.palette_table = PaletteTable()
+        self.palette_table.color_double_clicked.connect(self.faces_table.update_icon)
         
         self.color_config_panel = TablePanel(['.png'])
         self.color_config_panel.setup_tables([self.faces_table, self.palette_table])

@@ -37,11 +37,16 @@ class FacesTable(JsonTableWidget):
         self.populate_table()
 
     @QtCore.Slot(QtGui.QPixmap)
-    def update_icon(self, color_box):
-        self.currentItem().setIcon(color_box)
+    def update_icon(self, color_box: QtGui.QPixmap):
+        if self.selectedIndexes():
+            i = self.selectedIndexes()[0].row()
+            self.item(i, 0).setIcon(QtGui.QIcon(color_box))
+            self.update(self.selectedIndexes()[0])
+            # self.setCurrentItem(QtWidgets.QTableWidgetItem(QtGui.QIcon(color_box), self.currentItem().text()))
 
     def on_current_index_changed(self):
         self.face_changed.emit(self.faces[self.currentItem().row()])
         
     def on_face_double_clicked(self):
+        """ Emits the int for the number, which face it is. """
         self.face_double_clicked.emit(self.currentItem().row())
