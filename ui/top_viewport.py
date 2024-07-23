@@ -17,7 +17,6 @@ class TopViewport(QtWidgets.QWidget):
         
         self.figure = Figure()
         self.canvas = FigureCanvasQTAgg(self.figure)
-        self.figure.canvas.mpl_connect('button_release_event', self.on_button_release_event)
         self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion_notify_event)
         layout.addWidget(self.canvas)
 
@@ -30,10 +29,13 @@ class TopViewport(QtWidgets.QWidget):
         self.setFixedSize(QtCore.QSize(300, 300))
         self.setLayout(layout)
     
-    def draw_figure(self, vertices, faced_vertices):
+    def draw_figure(self, vertices, faces):
         self.ax.clear()
-        colors = [(0, 0, 0, 0.25) for _ in range(len(faced_vertices))]
-        self.shape_collection = self.ax.add_collection3d(Poly3DCollection(faced_vertices, color=colors))
+        colors = [(0, 0, 0, 0.25) for _ in range(len(faces))]
+        
+        print([f for f in faces])
+        self.face_vertices = [[vertices[v] for v in f] for f in faces]
+        self.shape_collection = self.ax.add_collection3d(Poly3DCollection(self.face_vertices, color=colors))
         
         xlims = min(vertices, key=lambda v: v[0])[0], max(vertices, key=lambda v: v[0])[0]
         ylims = min(vertices, key=lambda v: v[1])[1], max(vertices, key=lambda v: v[1])[1]
@@ -47,12 +49,16 @@ class TopViewport(QtWidgets.QWidget):
         self.figure.set_canvas(self.canvas)
         self.canvas.draw()
 
-    def on_button_release_event(self, event: MouseEvent):
-        print('Button release')
-        self.projection_changed.emit(self.ax.get_proj())
-    
+    @QtCore.Slot(int)
+    def isolate_face(self, face):
+        self.shape_collection.set_facecolor((0, 0, 0, 0.1))
+        
+        # Adding the isolated face to the axis
+        self.ax.add_collection3d(Poly3DCollection([self.face_vertices[face]], color=(0.25, 0, 0.1, 0.3)))
+        self.canvas.draw()
+        
     def on_motion_notify_event(self, event: MouseEvent):
-        print('Mouse Motion')
+        # print('Mouse Motion')
         self.projection_changed.emit(self.ax.get_proj())
         
     def get_camera_angles(self):

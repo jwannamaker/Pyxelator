@@ -15,34 +15,31 @@ class TablePanel(QtWidgets.QWidget):
     def _setup(self, file_types):
         self.panel_layout = QtWidgets.QGridLayout()
         self.panel_layout.setContentsMargins(0, 0, 0, 0)
-        self.panel_layout.setSpacing(5)
-        self.panel_layout.setRowMinimumHeight(0, 5)
-        self.panel_layout.setRowStretch(0, 5)
+        self.panel_layout.setSpacing(0)
 
         toolbar = QtWidgets.QHBoxLayout()
+        toolbar.setSpacing(0)
         
         self.file_choice = QtWidgets.QComboBox()
-        self.file_choice.setPlaceholderText('-')
+        self.file_choice.setPlaceholderText('Select a File')
         self.file_choices = {i.name: i 
                              for i in Path.joinpath(Path.cwd(), 'resources').iterdir() 
                              if i.is_file() and i.suffix in file_types}
         self.file_choice.addItems(self.file_choices)
         toolbar.addWidget(self.file_choice, QtCore.Qt.AlignmentFlag.AlignTop)
         
-        self.open_button = QtWidgets.QPushButton('Open')
-        self.open_button.setFixedWidth(80)
-        toolbar.addWidget(self.open_button, QtCore.Qt.AlignmentFlag.AlignTop)
-        
         self.render_button = QtWidgets.QPushButton('Render')
-        self.render_button.setFixedWidth(80)
-        toolbar.addWidget(self.render_button, QtCore.Qt.AlignmentFlag.AlignTop)
+        self.render_button.setFixedWidth(120)
+        toolbar.addWidget(self.render_button, QtCore.Qt.AlignmentFlag.AlignLeading)
         
-        self.panel_layout.addLayout(toolbar, 0, 0)
+        self.panel_layout.addLayout(toolbar, 0, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.setLayout(self.panel_layout)
 
     def setup_tables(self, tables: list[JsonTableWidget]):
-        for i, table in enumerate(tables):
-            self.panel_layout.addWidget(table, 1, i)
+        table_layout = QtWidgets.QHBoxLayout()
+        for table in tables:
+            table_layout.addWidget(table)
+        self.panel_layout.addLayout(table_layout, 1, 0, QtCore.Qt.AlignmentFlag.AlignBottom)
     
     def get_current_choice(self):
         return self.file_choices[self.file_choice.currentText()]

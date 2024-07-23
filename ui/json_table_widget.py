@@ -11,6 +11,7 @@ class JsonTableWidget(QtWidgets.QTableWidget, QtCore.QObject):
         self.data = {}
         self.setColumnCount(num_col)
         self.setHorizontalHeaderLabels(col_labels)
+        self.setIconSize(QtCore.QSize(100, 100))
         self._config_table()
 
     def _config_table(self):
@@ -22,6 +23,13 @@ class JsonTableWidget(QtWidgets.QTableWidget, QtCore.QObject):
         self.setEditTriggers(QtWidgets.QTableWidget.EditTrigger.NoEditTriggers)
         self.setShowGrid(False)
 
+    def _reset(self):
+        self.clearSelection()
+        self.data = {}
+        
+        for i in range(self.rowCount()):
+            self.removeRow(i)
+    
     def get_current_selected(self):
         return tuple(self.data[self.currentRow()])
     
