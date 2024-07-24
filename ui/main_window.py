@@ -14,7 +14,7 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Pyxelator')
-        self.setMinimumSize(600, 600)
+        self.setMinimumSize(800, 800)
         self.setFocus(QtCore.Qt.FocusReason.NoFocusReason)
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         
@@ -28,10 +28,10 @@ class MainWindow(QtWidgets.QWidget):
         self.grid_layout.setColumnStretch(1, 0)
         self.grid_layout.setColumnMinimumWidth(2, 400)
         
-        self.grid_layout.setRowMinimumHeight(0, 256)
+        self.grid_layout.setRowMinimumHeight(0, 300)
         self.grid_layout.setRowMinimumHeight(1, 5)
         self.grid_layout.setRowStretch(1, 0)
-        self.grid_layout.setRowMinimumHeight(2, 256)
+        self.grid_layout.setRowMinimumHeight(2, 300)
         
         self._setup_left_side()
         self._setup_right_side()
@@ -69,7 +69,7 @@ class MainWindow(QtWidgets.QWidget):
         self.faces_table.face_double_clicked.connect(self.top_viewport.isolate_face)
         
         self.palette_table = PaletteTable()
-        self.palette_table.color_double_clicked.connect(self.faces_table.update_icon)
+        self.palette_table.color_selected.connect(self.faces_table.update_icon)
         
         self.color_config_panel = TablePanel(['.png'])
         self.color_config_panel.setup_tables([self.faces_table, self.palette_table])
@@ -96,6 +96,4 @@ class MainWindow(QtWidgets.QWidget):
                                       self.vertices_table.get_faces())
         
     def render_bottom(self):
-        self.bottom_viewport.render(self.vertices_table.get_faced_vertices(), 
-                                    self.palette_table.get_colors(),
-                                    *self.top_viewport.get_camera_angles())
+        pass

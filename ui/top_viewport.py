@@ -26,7 +26,7 @@ class TopViewport(QtWidgets.QWidget):
         self.ax.set_axis_off()
         self.canvas.figure.tight_layout(rect=(0, 0, 1, 1))
         
-        self.setFixedSize(QtCore.QSize(300, 300))
+        self.setFixedSize(QtCore.QSize(320, 320))
         self.setLayout(layout)
     
     def draw_figure(self, vertices, faces):

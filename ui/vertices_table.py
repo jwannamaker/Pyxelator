@@ -12,7 +12,7 @@ class VerticesTable(JsonTableWidget):
         super().__init__(1, ['Vertices'])
         self.setSelectionMode(QtWidgets.QTableWidget.SelectionMode.MultiSelection)
         self.verticalHeader().setVisible(True)
-        # self.verticalScrollBar().setEnabled(True)
+
         self.faces = {}
     
     def _reset(self):
@@ -31,12 +31,6 @@ class VerticesTable(JsonTableWidget):
 
     def get_faces(self):
         return list(self.faces.values())
-
-    def get_faced_vertices(self):
-        # X = [self.data[k][0] for k in self.data]
-        # Y = [self.data[k][1] for k in self.data]
-        # Z = [self.data[k][2] for k in self.data]
-        return [[self.data[v] for v in face] for face in self.faces.values()]
 
     @QtCore.Slot()
     def open_file_dialog(self, file_choice=None):

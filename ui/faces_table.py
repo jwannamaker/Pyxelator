@@ -36,11 +36,9 @@ class FacesTable(JsonTableWidget):
         self.faces = faces
         self.populate_table()
 
-    @QtCore.Slot(QtGui.QPixmap, list, tuple)
-    def update_icon(self, color_icon: QtGui.QPixmap, color: list[int], norm_color: tuple[int]):
-        # self.removeRow(self.currentRow())
-        # self.insertRow(self.currentRow())
-        color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), norm_color))
+    @QtCore.Slot(tuple)
+    def update_icon(self, color):
+        color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), color))
         updated_item = QtWidgets.QTableWidgetItem(self.currentItem())
         updated_item.setIcon(QtGui.QPixmap(color_box))
         self.setItem(self.currentRow(), 0, updated_item)
