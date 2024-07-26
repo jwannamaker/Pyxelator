@@ -13,8 +13,10 @@ class PaletteTable(JsonTableWidget):
     def __init__(self):
         super().__init__(1, ['Palette'])
         
-        self.horizontalHeader().sectionPressed.connect(self.on_color_selected)
-        # self.setMaximumWidth(120)
+        # self.horizontalHeader().sectionPressed.connect(self.on_color_selected)
+        
+        self.setDragEnabled(True)
+        
     
     def get_normalized_color(self):
         """ Returns a tuple of 3 floats in range [0, 1]. """

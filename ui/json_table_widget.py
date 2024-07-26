@@ -14,7 +14,7 @@ class JsonTableWidget(QtWidgets.QTableWidget, QtCore.QObject):
         self._config_table()
 
     def _config_table(self):
-        self.setIconSize(QtCore.QSize(100, 100))
+        self.setIconSize(QtCore.QSize(48, 48))
         self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.verticalHeader().setVisible(False)

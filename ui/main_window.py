@@ -4,7 +4,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from ui.top_viewport import TopViewport
 from ui.bottom_viewport import BottomViewport
 from ui.vertices_table import VerticesTable
-from ui.projection_table import ProjectionTable
+from ui.projection_info import ProjectionInfo
 from ui.faces_table import FacesTable
 from ui.palette_table import PaletteTable
 from ui.table_panel import TablePanel
@@ -52,7 +52,7 @@ class MainWindow(QtWidgets.QWidget):
         #                            QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
         self.vertices_table = VerticesTable()
         
-        self.projection_table = ProjectionTable()
+        self.projection_table = ProjectionInfo()
         self.top_viewport.projection_changed.connect(self.projection_table.update_projection)
         
         self.model_config_panel = TablePanel(['.obj'])

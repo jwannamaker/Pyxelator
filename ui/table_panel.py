@@ -35,10 +35,13 @@ class TablePanel(QtWidgets.QWidget):
         self.panel_layout.addLayout(toolbar, 0, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.setLayout(self.panel_layout)
 
-    def setup_tables(self, tables: list[JsonTableWidget]):
+    def setup_tables(self, tables: list[QtWidgets.QWidget]):
         table_layout = QtWidgets.QHBoxLayout()
         for table in tables:
-            table_layout.addWidget(table)
+            if isinstance(table, QtWidgets.QWidget):
+                table_layout.addWidget(table)
+            else:
+                table_layout.addLayout(table)
         self.panel_layout.addLayout(table_layout, 1, 0, QtCore.Qt.AlignmentFlag.AlignBottom)
     
     def get_current_choice(self):
