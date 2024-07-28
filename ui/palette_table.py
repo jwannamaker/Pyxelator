@@ -12,12 +12,8 @@ class PaletteTable(JsonTableWidget):
     
     def __init__(self):
         super().__init__(1, ['Palette'])
+        self.setVisible(False)
         
-        # self.horizontalHeader().sectionPressed.connect(self.on_color_selected)
-        
-        self.setDragEnabled(True)
-        
-    
     def get_normalized_color(self):
         """ Returns a tuple of 3 floats in range [0, 1]. """
         i = self.currentIndex().row()
@@ -31,6 +27,9 @@ class PaletteTable(JsonTableWidget):
             text = f'{color[0]:3d} {color[1]:3d} {color[2]:3d}'
             self.setItem(row, 0, QtWidgets.QTableWidgetItem(QtGui.QPixmap(color_box), text))
             self.item(row, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+    
+    def get_colors(self):
+        return list(self.data.values())
     
     @QtCore.Slot()
     def open_file_dialog(self, file_choice):

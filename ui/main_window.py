@@ -8,6 +8,7 @@ from ui.projection_info import ProjectionInfo
 from ui.faces_table import FacesTable
 from ui.palette_table import PaletteTable
 from ui.table_panel import TablePanel
+from ui.palette_widget import PaletteWidget
 
 
 class MainWindow(QtWidgets.QWidget):
@@ -19,6 +20,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         
         self.setFont(QtGui.QFont(['Courier', 'Monospace']))
+        # self.setStyle()
         
         self.grid_layout = QtWidgets.QGridLayout()
         self.grid_layout.setSpacing(12)
@@ -52,11 +54,12 @@ class MainWindow(QtWidgets.QWidget):
         #                            QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
         self.vertices_table = VerticesTable()
         
-        self.projection_table = ProjectionInfo()
-        self.top_viewport.projection_changed.connect(self.projection_table.update_projection)
+        self.projection_info = ProjectionInfo()
+        self.top_viewport.projection_changed.connect(self.projection_info.update_projection)
+        self.top_viewport.angle_changed.connect(self.projection_info.update_angles)
         
         self.model_config_panel = TablePanel(['.obj'])
-        self.model_config_panel.setup_tables([self.vertices_table, self.projection_table])
+        self.model_config_panel.setup_tables([self.vertices_table, self.projection_info])
         self.model_config_panel.file_choice.currentIndexChanged.connect(self.open_model)
         self.model_config_panel.render_button.released.connect(self.render_top)
         
@@ -70,9 +73,10 @@ class MainWindow(QtWidgets.QWidget):
         
         self.palette_table = PaletteTable()
         self.palette_table.color_selected.connect(self.faces_table.update_icon)
+        self.palette_widget = PaletteWidget(self.palette_table.get_colors())
         
         self.color_config_panel = TablePanel(['.png'])
-        self.color_config_panel.setup_tables([self.faces_table, self.palette_table])
+        self.color_config_panel.setup_tables([self.faces_table, self.palette_widget])
         self.color_config_panel.file_choice.currentIndexChanged.connect(self.open_palette)
         self.color_config_panel.render_button.released.connect(self.render_bottom)
         
@@ -85,11 +89,12 @@ class MainWindow(QtWidgets.QWidget):
         self.faces_table.clearSelection()
         self.faces_table.reset(self.vertices_table.get_faces())
         
-        self.model_config_panel.setup_tables([self.vertices_table, self.projection_table])
+        self.model_config_panel.setup_tables([self.vertices_table, self.projection_info])
 
     def open_palette(self):
         self.palette_table.open_file_dialog(self.color_config_panel.get_current_choice())
-        self.color_config_panel.setup_tables([self.faces_table, self.palette_table])
+        self.palette_widget = PaletteWidget(self.palette_table.get_colors())
+        self.color_config_panel.setup_tables([self.faces_table, self.palette_widget])
 
     def render_top(self):
         self.top_viewport.draw_figure(self.vertices_table.get_vertices(), 

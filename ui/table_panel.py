@@ -30,7 +30,7 @@ class TablePanel(QtWidgets.QWidget):
         
         self.render_button = QtWidgets.QPushButton('Render')
         self.render_button.setFixedWidth(120)
-        toolbar.addWidget(self.render_button, QtCore.Qt.AlignmentFlag.AlignLeading)
+        toolbar.addWidget(self.render_button, QtCore.Qt.AlignmentFlag.AlignTop)
         
         self.panel_layout.addLayout(toolbar, 0, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.setLayout(self.panel_layout)
