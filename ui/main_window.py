@@ -4,21 +4,23 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from ui.top_viewport import TopViewport
 from ui.bottom_viewport import BottomViewport
 from ui.vertices_table import VerticesTable
-from ui.projection_table import ProjectionTable
+from ui.projection_info import ProjectionInfo
 from ui.faces_table import FacesTable
 from ui.palette_table import PaletteTable
 from ui.table_panel import TablePanel
+from ui.palette_widget import PaletteWidget
 
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Pyxelator')
-        self.setMinimumSize(600, 600)
+        self.setMinimumSize(800, 800)
         self.setFocus(QtCore.Qt.FocusReason.NoFocusReason)
         self.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         
         self.setFont(QtGui.QFont(['Courier', 'Monospace']))
+        # self.setStyle()
         
         self.grid_layout = QtWidgets.QGridLayout()
         self.grid_layout.setSpacing(12)
@@ -28,10 +30,10 @@ class MainWindow(QtWidgets.QWidget):
         self.grid_layout.setColumnStretch(1, 0)
         self.grid_layout.setColumnMinimumWidth(2, 400)
         
-        self.grid_layout.setRowMinimumHeight(0, 256)
+        self.grid_layout.setRowMinimumHeight(0, 300)
         self.grid_layout.setRowMinimumHeight(1, 5)
         self.grid_layout.setRowStretch(1, 0)
-        self.grid_layout.setRowMinimumHeight(2, 256)
+        self.grid_layout.setRowMinimumHeight(2, 300)
         
         self._setup_left_side()
         self._setup_right_side()
@@ -52,11 +54,12 @@ class MainWindow(QtWidgets.QWidget):
         #                            QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
         self.vertices_table = VerticesTable()
         
-        self.projection_table = ProjectionTable()
-        self.top_viewport.projection_changed.connect(self.projection_table.update_projection)
+        self.projection_info = ProjectionInfo()
+        self.top_viewport.projection_changed.connect(self.projection_info.update_projection)
+        self.top_viewport.angle_changed.connect(self.projection_info.update_angles)
         
         self.model_config_panel = TablePanel(['.obj'])
-        self.model_config_panel.setup_tables([self.vertices_table, self.projection_table])
+        self.model_config_panel.setup_tables([self.vertices_table, self.projection_info])
         self.model_config_panel.file_choice.currentIndexChanged.connect(self.open_model)
         self.model_config_panel.render_button.released.connect(self.render_top)
         
@@ -69,7 +72,7 @@ class MainWindow(QtWidgets.QWidget):
         self.faces_table.face_double_clicked.connect(self.top_viewport.isolate_face)
         
         self.palette_table = PaletteTable()
-        self.palette_table.color_double_clicked.connect(self.faces_table.update_icon)
+        self.palette_table.color_clicked.connect(self.faces_table.update_icon)
         
         self.color_config_panel = TablePanel(['.png'])
         self.color_config_panel.setup_tables([self.faces_table, self.palette_table])
@@ -85,7 +88,7 @@ class MainWindow(QtWidgets.QWidget):
         self.faces_table.clearSelection()
         self.faces_table.reset(self.vertices_table.get_faces())
         
-        self.model_config_panel.setup_tables([self.vertices_table, self.projection_table])
+        self.model_config_panel.setup_tables([self.vertices_table, self.projection_info])
 
     def open_palette(self):
         self.palette_table.open_file_dialog(self.color_config_panel.get_current_choice())
@@ -96,6 +99,4 @@ class MainWindow(QtWidgets.QWidget):
                                       self.vertices_table.get_faces())
         
     def render_bottom(self):
-        self.bottom_viewport.render(self.vertices_table.get_faced_vertices(), 
-                                    self.palette_table.get_colors(),
-                                    *self.top_viewport.get_camera_angles())
+        pass

@@ -8,6 +8,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 class TopViewport(QtWidgets.QWidget):
     projection_changed = QtCore.Signal(np.ndarray)
+    angle_changed = QtCore.Signal(float, float, float)
     
     def __init__(self):
         super().__init__()
@@ -26,7 +27,7 @@ class TopViewport(QtWidgets.QWidget):
         self.ax.set_axis_off()
         self.canvas.figure.tight_layout(rect=(0, 0, 1, 1))
         
-        self.setFixedSize(QtCore.QSize(300, 300))
+        self.setFixedSize(QtCore.QSize(320, 320))
         self.setLayout(layout)
     
     def draw_figure(self, vertices, faces):
@@ -57,8 +58,8 @@ class TopViewport(QtWidgets.QWidget):
         self.canvas.draw()
         
     def on_motion_notify_event(self, event: MouseEvent):
-        # print('Mouse Motion')
         self.projection_changed.emit(self.ax.get_proj())
+        self.angle_changed.emit(*self.get_camera_angles())
         
     def get_camera_angles(self):
         return self.ax.azim, self.ax.elev, self.ax.roll
