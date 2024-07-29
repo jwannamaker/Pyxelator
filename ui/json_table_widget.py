@@ -17,6 +17,7 @@ class JsonTableWidget(QtWidgets.QTableWidget, QtCore.QObject):
         self.setIconSize(QtCore.QSize(48, 48))
         self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.verticalHeader().setMinimumSectionSize(50)
         self.verticalHeader().setVisible(False)
         self.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
         self.setSelectionMode(QtWidgets.QTableWidget.SelectionMode.SingleSelection)

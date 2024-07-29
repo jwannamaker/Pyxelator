@@ -9,14 +9,10 @@ class FacesTable(JsonTableWidget):
     face_double_clicked = QtCore.Signal(int)
     
     def __init__(self, faces):
-        super().__init__(2, ['Face', 'Color'])
+        super().__init__(1, ['Face'])
         self.verticalHeader().setVisible(True)
         self.currentItemChanged.connect(self.on_current_index_changed)
         self.itemDoubleClicked.connect(self.on_face_double_clicked)
-        
-        self.setAcceptDrops(True)
-        
-        self.setDefaultDropAction(QtCore.Qt.DropAction.MoveAction)
         
         self.faces = faces
         self.populate_table()
@@ -32,8 +28,7 @@ class FacesTable(JsonTableWidget):
                 text += f'{value + 1:2d} '
             text += ']'
             self.setItem(i, 0, QtWidgets.QTableWidgetItem(text))
-            self.item(i, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            self.setCellWidget(i, 1, ColorButton())
+            self.item(i, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignRight)
             
     def reset(self, faces):
         super()._reset()

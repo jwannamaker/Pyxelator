@@ -34,6 +34,7 @@ class ProjectionInfo(QtWidgets.QWidget):
             line.setTextMargins(1, 0, 1, 0)
             line.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
             line.setEnabled(False)
+            line.setMinimumWidth(250)
             hbox.addWidget(line)
             vbox.addLayout(hbox)
         self.grid_layout.addLayout(vbox, 0, 0)

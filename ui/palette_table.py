@@ -5,17 +5,16 @@ from PIL import Image, ImageQt
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from ui.json_table_widget import JsonTableWidget
-
+from ui.color_button import ColorButton
 
 class PaletteTable(JsonTableWidget):
-    color_selected = QtCore.Signal(tuple)
+    color_clicked = QtCore.Signal(tuple)
     
     def __init__(self):
         super().__init__(1, ['Palette'])
-        self.setVisible(False)
         
     def get_normalized_color(self):
-        """ Returns a tuple of 3 floats in range [0, 1]. """
+        """ Returns a tuple of 3 floats on range [0, 1]. """
         i = self.currentIndex().row()
         return self.data[i][0] / 255, self.data[i][1] / 255, self.data[i][2] / 255
     
@@ -23,10 +22,9 @@ class PaletteTable(JsonTableWidget):
         self.setRowCount(len(self.data))
         
         for row, color in self.data.items():
-            color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), color))
-            text = f'{color[0]:3d} {color[1]:3d} {color[2]:3d}'
-            self.setItem(row, 0, QtWidgets.QTableWidgetItem(QtGui.QPixmap(color_box), text))
-            self.item(row, 0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            color_button = ColorButton(color=color)
+            color_button.pressed.connect(lambda r=row: self.on_color_clicked(r))
+            self.setCellWidget(row, 0, color_button)
     
     def get_colors(self):
         return list(self.data.values())
@@ -66,6 +64,8 @@ class PaletteTable(JsonTableWidget):
         self.file_changed.emit(palette_png)
         self.populate_table()
     
-    def on_color_selected(self):
-        color = tuple(int(i) for i in self.currentItem().text().split())
-        self.color_selected.emit(color)
+    def on_color_clicked(self, row):
+        # color = tuple(int(i) for i in self.currentItem().text().split())
+        color = self.data[row]
+        print(color)
+        self.color_clicked.emit(color)
