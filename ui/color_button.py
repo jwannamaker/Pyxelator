@@ -4,15 +4,9 @@ from PySide6 import QtCore, QtGui, QtWidgets
 class ColorButton(QtWidgets.QPushButton):
     def __init__(self, parent=None, color=(255, 0, 0)):
         super().__init__(parent)
-        # self.layout().setSpacing(5)
-        # self.setFixedSize(100, 50)
         self.setLayout(QtWidgets.QHBoxLayout())
         self.layout().setSpacing(5)
-        # self.setIconSize(QtCore.QSize(32, 32))
         self.set_color(color)
-    
-    # def update_icon(self):
-        # self.setIcon(QtGui.QPixmap(color_box))
         
     def set_color(self, color):
         self.color = color

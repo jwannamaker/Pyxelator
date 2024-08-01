@@ -7,6 +7,7 @@ from ui.color_button import ColorButton
 class FacesTable(JsonTableWidget):
     face_changed = QtCore.Signal(list)
     face_double_clicked = QtCore.Signal(int)
+    color_chosen = QtCore.Signal(tuple)
     
     def __init__(self, faces):
         super().__init__(1, ['Face'])
@@ -21,8 +22,6 @@ class FacesTable(JsonTableWidget):
         self.setRowCount(len(self.faces))
 
         for i, v in enumerate(self.faces):
-            # default_color_box = ImageQt.ImageQt(Image.new('RGB', (100, 100), (255//4, 255//4, 255//4)))
-            # default_color_box = QtGui.QPixmap(default_color_box)
             text = '[ '
             for value in v:
                 text += f'{value + 1:2d} '
@@ -41,10 +40,11 @@ class FacesTable(JsonTableWidget):
         updated_item = QtWidgets.QTableWidgetItem(self.currentItem())
         updated_item.setIcon(QtGui.QPixmap(color_box))
         self.setItem(self.currentRow(), 0, updated_item)
+        self.color_chosen.emit(color)
 
     def on_current_index_changed(self):
-        self.face_changed.emit(self.faces[self.currentItem().row()])
+        self.face_changed.emit(self.faces[self.currentRow()])
         
     def on_face_double_clicked(self):
         """ Emits the int for the number, which face it is. """
-        self.face_double_clicked.emit(self.currentItem().row())
+        self.face_double_clicked.emit(self.currentRow())

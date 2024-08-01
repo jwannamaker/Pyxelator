@@ -8,7 +8,6 @@ from ui.projection_info import ProjectionInfo
 from ui.faces_table import FacesTable
 from ui.palette_table import PaletteTable
 from ui.table_panel import TablePanel
-from ui.palette_widget import PaletteWidget
 
 
 class MainWindow(QtWidgets.QWidget):
@@ -69,10 +68,12 @@ class MainWindow(QtWidgets.QWidget):
         #                            QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
         self.faces_table = FacesTable(self.vertices_table.get_faces())
         self.faces_table.face_changed.connect(self.vertices_table.show_selected_face)
+        self.faces_table.color_chosen.connect(self.vertices_table.set_highlight_color)
         self.faces_table.face_double_clicked.connect(self.top_viewport.isolate_face)
         
         self.palette_table = PaletteTable()
         self.palette_table.color_clicked.connect(self.faces_table.update_icon)
+        # self.palette_table.color_clicked.connect(self.vertices_table.set_highlight_color)
         
         self.color_config_panel = TablePanel(['.png'])
         self.color_config_panel.setup_tables([self.faces_table, self.palette_table])

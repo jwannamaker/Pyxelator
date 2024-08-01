@@ -10,10 +10,12 @@ from ui.json_table_widget import JsonTableWidget
 class VerticesTable(JsonTableWidget):
     def __init__(self):
         super().__init__(1, ['Vertices'])
-        self.setSelectionMode(QtWidgets.QTableWidget.SelectionMode.MultiSelection)
         self.verticalHeader().setVisible(True)
-
+        self.setSelectionMode(QtWidgets.QTableWidget.SelectionMode.MultiSelection)
+        self.selectionModel().selectionChanged.connect(self.highlight_selected_rows)
+        
         self.faces = {}
+        self.highlight_color = (0, 0, 0)
     
     def _reset(self):
         super()._reset()
@@ -77,9 +79,31 @@ class VerticesTable(JsonTableWidget):
     
     @QtCore.Slot(list)
     def show_selected_face(self, row_indices):
-        self.clearSelection()
+        # self.clearSelection()
 
-        for v in row_indices:
-            self.selectRow(v)
+        # for v in row_indices:
+        #     self.selectRow(v)
+        self.highlight_rows(row_indices)
+    
+    @QtCore.Slot(tuple)
+    def set_highlight_color(self, color):
+        self.highlight_color = color
+    
+    def highlight_selected_rows(self, selected: QtCore.QItemSelection, deselected: QtCore.QItemSelection):
+        selected_rows = [index.row() for index in selected.indexes()]
+        self.highlight_rows(selected_rows)
+        
+        deselected_rows = [index.row() for index in deselected.indexes()]
+        self.dehighlight_rows(deselected_rows)
+    
+    def dehighlight_rows(self, rows):
+        for row in rows:
+            for col in range(self.columnCount()):
+                self.item(row, col).setBackground(QtGui.QColor(0, 0, 0))
+    
+    def highlight_rows(self, rows):
+        for row in rows:    
+            for col in range(self.columnCount()):
+                self.item(row, col).setBackground(QtGui.QColor(*self.highlight_color).lighter(70))
             
         

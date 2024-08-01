@@ -12,6 +12,7 @@ class PaletteTable(JsonTableWidget):
     
     def __init__(self):
         super().__init__(1, ['Palette'])
+        self.setSelectionMode(QtWidgets.QTableWidget.SelectionMode.NoSelection)
         
     def get_normalized_color(self):
         """ Returns a tuple of 3 floats on range [0, 1]. """
@@ -65,7 +66,5 @@ class PaletteTable(JsonTableWidget):
         self.populate_table()
     
     def on_color_clicked(self, row):
-        # color = tuple(int(i) for i in self.currentItem().text().split())
         color = self.data[row]
-        print(color)
         self.color_clicked.emit(color)
