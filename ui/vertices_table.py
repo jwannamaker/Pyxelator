@@ -19,7 +19,7 @@ class VerticesTable(JsonTableWidget):
     
     def _reset(self):
         super()._reset()
-        self.data = {}
+        self.faces = {}
     
     def populate_table(self):
         self.setRowCount(len(self.data))
@@ -79,10 +79,7 @@ class VerticesTable(JsonTableWidget):
     
     @QtCore.Slot(list)
     def show_selected_face(self, row_indices):
-        # self.clearSelection()
-
-        # for v in row_indices:
-        #     self.selectRow(v)
+        self.dehighlight_rows([_ for _ in range(self.rowCount())])
         self.highlight_rows(row_indices)
     
     @QtCore.Slot(tuple)

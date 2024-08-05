@@ -58,11 +58,11 @@ class MainWindow(QtWidgets.QWidget):
         self.top_viewport.angle_changed.connect(self.projection_info.update_angles)
         
         self.model_config_panel = TablePanel(['.obj'])
-        self.model_config_panel.setup_tables([self.vertices_table, self.projection_info])
+        self.model_config_panel.setup_tables([self.vertices_table])
         self.model_config_panel.file_choice.currentIndexChanged.connect(self.open_model)
         self.model_config_panel.render_button.released.connect(self.render_top)
         
-        self.grid_layout.addWidget(self.model_config_panel, 0, 2)
+        self.grid_layout.addWidget(self.model_config_panel, 0, 2, 3, 1)
         
         # self.grid_layout.addWidget(QtWidgets.QLabel('Pixel Art Configuration'), 2, 0, 1, 3,
         #                            QtCore.Qt.AlignmentFlag.AlignCenter | QtCore.Qt.AlignmentFlag.AlignTop)
@@ -73,23 +73,23 @@ class MainWindow(QtWidgets.QWidget):
         
         self.palette_table = PaletteTable()
         self.palette_table.color_clicked.connect(self.faces_table.update_icon)
-        # self.palette_table.color_clicked.connect(self.vertices_table.set_highlight_color)
+        self.palette_table.color_clicked.connect(self.vertices_table.set_highlight_color)
         
         self.color_config_panel = TablePanel(['.png'])
         self.color_config_panel.setup_tables([self.faces_table, self.palette_table])
         self.color_config_panel.file_choice.currentIndexChanged.connect(self.open_palette)
         self.color_config_panel.render_button.released.connect(self.render_bottom)
         
-        self.grid_layout.addWidget(self.color_config_panel, 2, 2)
+        self.grid_layout.addWidget(self.color_config_panel, 0, 3, 3, 1)
     
     def open_model(self):
-        self.vertices_table.clearSelection()
+        self.vertices_table.reset()
         self.vertices_table.open_file_dialog(self.model_config_panel.get_current_choice())
         
         self.faces_table.clearSelection()
         self.faces_table.reset(self.vertices_table.get_faces())
         
-        self.model_config_panel.setup_tables([self.vertices_table, self.projection_info])
+        self.model_config_panel.setup_tables([self.vertices_table])
 
     def open_palette(self):
         self.palette_table.open_file_dialog(self.color_config_panel.get_current_choice())

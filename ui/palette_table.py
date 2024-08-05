@@ -24,7 +24,7 @@ class PaletteTable(JsonTableWidget):
         
         for row, color in self.data.items():
             color_button = ColorButton(color=color)
-            color_button.pressed.connect(lambda r=row: self.on_color_clicked(r))
+            color_button.pressed.connect(lambda c=color: self.color_clicked.emit(c))
             self.setCellWidget(row, 0, color_button)
     
     def get_colors(self):
@@ -64,7 +64,3 @@ class PaletteTable(JsonTableWidget):
         
         self.file_changed.emit(palette_png)
         self.populate_table()
-    
-    def on_color_clicked(self, row):
-        color = self.data[row]
-        self.color_clicked.emit(color)
